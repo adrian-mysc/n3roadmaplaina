@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz de Certificação — N3 Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/quiz.css">
+<meta name="theme-color" content="#0d0f0e">
+</head>
+<body>
+
+<!-- ═══ TOP NAV ═══ -->
+<nav class="top-nav" id="topNav">
+  <div class="wrap">
+    <span class="nav-brand">N3 Platform</span>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Roadmap</a>
+      <a href="quiz.html"  class="nav-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Quiz
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ PAGE HERO ═══ -->
+<div class="quiz-page-hero">
+  <div class="wrap">
+    <p class="quiz-page-eyebrow">// SIMULADOR DE PROVAS</p>
+    <h1 class="quiz-page-title">Quiz de Certificação</h1>
+    <p class="quiz-page-sub">
+      <span id="qTotalCount">—</span> questões · iniciante, intermediário e avançado ·
+      Filtre por tópico, nível ou certificação · estilo das provas reais
+    </p>
+    <!-- Live stats bar -->
+    <div class="quiz-stats-bar" id="quizStatsBar">
+      <div class="qsb-item">
+        <span class="qsb-n" id="sbTotal">—</span>
+        <span class="qsb-l">Total</span>
+      </div>
+      <div class="qsb-sep"></div>
+      <div class="qsb-item">
+        <span class="qsb-n" id="sbBeginner">—</span>
+        <span class="qsb-l">Iniciante</span>
+      </div>
+      <div class="qsb-sep"></div>
+      <div class="qsb-item">
+        <span class="qsb-n" id="sbInter">—</span>
+        <span class="qsb-l">Intermediário</span>
+      </div>
+      <div class="qsb-sep"></div>
+      <div class="qsb-item">
+        <span class="qsb-n" id="sbAdvanced">—</span>
+        <span class="qsb-l">Avançado</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FILTER BAR ═══ -->
+<div class="quiz-filters" id="quizFilters">
+  <div class="wrap">
+    <div class="qf-row">
+
+      <!-- Search -->
+      <div class="qf-search-wrap">
+        <svg class="qf-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" class="qf-search" id="qSearch"
+               placeholder="Buscar questão, tópico ou explicação..." oninput="qFiltersChanged()">
+      </div>
+
+      <!-- Level -->
+      <select class="qf-select" id="qLevel" onchange="qFiltersChanged()">
+        <option value="all">Todos os níveis</option>
+        <option value="beginner">Iniciante</option>
+        <option value="intermediate">Intermediário</option>
+        <option value="advanced">Avançado</option>
+      </select>
+
+      <!-- Topic -->
+      <select class="qf-select" id="qTopic" onchange="qFiltersChanged()">
+        <option value="all">Todos os tópicos</option>
+      </select>
+
+      <!-- Cert -->
+      <select class="qf-select" id="qCert" onchange="qFiltersChanged()">
+        <option value="all">Todas as certs</option>
+      </select>
+
+      <!-- Actions -->
+      <div class="qf-actions">
+        <button class="qf-btn" onclick="quizShuffle()" title="Embaralhar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+            <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+          </svg>
+          Aleatório
+        </button>
+        <button class="qf-btn qf-btn-danger" onclick="quizReset()" title="Reiniciar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <polyline points="23 4 23 10 17 10"/>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+          Reiniciar
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Active filters chips -->
+    <div class="qf-chips" id="qfChips"></div>
+  </div>
+</div>
+
+<!-- ═══ QUIZ BOX ═══ -->
+<div class="wrap" style="padding-top:24px; padding-bottom:80px;">
+
+  <!-- Question dots navigation -->
+  <div class="quiz-dots-row" id="quizDotsRow"></div>
+
+  <!-- Main quiz card -->
+  <div class="quiz-box" id="quizBox">
+
+    <div class="quiz-header">
+      <div>
+        <div class="quiz-title" id="quizBoxTitle">Quiz de Certificação</div>
+        <div class="quiz-subtitle" id="quizBoxSub">// carregando questões...</div>
+      </div>
+      <div class="quiz-meta" id="quizMeta">0 / 0 corretas</div>
+    </div>
+
+    <!-- Difficulty filter tabs -->
+    <div class="quiz-tabs">
+      <button class="qtab qtab-active" data-level="all"          onclick="quizSetLevel('all')">
+        <span class="qtab-dot" style="background:#6b8070"></span>Todas
+      </button>
+      <button class="qtab" data-level="beginner"                 onclick="quizSetLevel('beginner')">
+        <span class="qtab-dot" style="background:var(--c1)"></span>Iniciante
+      </button>
+      <button class="qtab" data-level="intermediate"             onclick="quizSetLevel('intermediate')">
+        <span class="qtab-dot" style="background:var(--c2)"></span>Intermediário
+      </button>
+      <button class="qtab" data-level="advanced"                 onclick="quizSetLevel('advanced')">
+        <span class="qtab-dot" style="background:var(--c5)"></span>Avançado
+      </button>
+      <button class="qtab qtab-shuffle" onclick="quizShuffle()" title="Embaralhar questões">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+          <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+          <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+        </svg>
+        Aleatório
+      </button>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="quiz-progress-bar">
+      <div class="quiz-progress-fill" id="quizProgressFill" style="width:0%"></div>
+    </div>
+
+    <!-- Question body -->
+    <div class="quiz-body" id="quizBody">
+      <div style="text-align:center;padding:48px 20px;color:var(--muted)">
+        <div style="font-size:2rem;margin-bottom:12px">⚡</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.8rem">Carregando questões...</div>
+      </div>
+    </div>
+
+  </div><!-- /quiz-box -->
+
+  <!-- ─── SESSION HISTORY (last 5 results) ─── -->
+  <div id="sessionHistory" style="margin-top:32px; display:none">
+    <p class="section-label">Histórico da sessão</p>
+    <div class="history-grid" id="historyGrid"></div>
+  </div>
+
+</div><!-- /wrap -->
+
+<!-- ═══ SCRIPTS ═══ -->
+<!-- 1. Question bank (base) -->
+<script src="data/questions.js"></script>
+
+<!-- 2. Extra question packs (add more packs here as you scale):
+<script src="data/questions-ccna.js"></script>
+<script src="data/questions-linux.js"></script>
+<script src="data/questions-azure.js"></script>
+<script src="data/questions-security.js"></script>
+-->
+
+<!-- 3. Quiz engine -->
+<script src="assets/js/quiz-engine.js"></script>
+
+<!-- 4. Quiz page controller (filters, stats bar, history) -->
+<script>
+/* ═══════════════════════════════════════════════════════
+   QUIZ PAGE CONTROLLER
+   Connects filters, stats bar, dots and history
+   to the quiz engine defined in quiz-engine.js
+═══════════════════════════════════════════════════════ */
+(function () {
+
+  /* ── POPULATE SELECTS ─────────────────────────── */
+  function populateSelects() {
+    var topicSel = document.getElementById('qTopic');
+    var certSel  = document.getElementById('qCert');
+
+    QBank.topics().forEach(function(t) {
+      var o = document.createElement('option');
+      o.value = t;
+      o.textContent = t === 'all' ? 'Todos os tópicos' : t;
+      topicSel.appendChild(o);
+    });
+
+    QBank.certs().forEach(function(c) {
+      var o = document.createElement('option');
+      o.value = c;
+      o.textContent = c === 'all' ? 'Todas as certs' : c;
+      certSel.appendChild(o);
+    });
+  }
+
+  /* ── STATS BAR ────────────────────────────────── */
+  function updateStatsBar() {
+    var all  = QBank.all();
+    var pool = getCurrentPool ? getCurrentPool() : all;
+
+    document.getElementById('sbTotal').textContent    = pool.length;
+    document.getElementById('sbBeginner').textContent = pool.filter(function(q){return q.level==='beginner'}).length;
+    document.getElementById('sbInter').textContent    = pool.filter(function(q){return q.level==='intermediate'}).length;
+    document.getElementById('sbAdvanced').textContent = pool.filter(function(q){return q.level==='advanced'}).length;
+    document.getElementById('qTotalCount').textContent = all.length;
+  }
+
+  /* ── FILTER CHIPS ─────────────────────────────── */
+  function updateChips() {
+    var chips = document.getElementById('qfChips');
+    var level = document.getElementById('qLevel').value;
+    var topic = document.getElementById('qTopic').value;
+    var cert  = document.getElementById('qCert').value;
+    var search= document.getElementById('qSearch').value;
+    var html  = '';
+
+    if (level  !== 'all') html += chip(levelLabel(level), 'level', level);
+    if (topic  !== 'all') html += chip(topic, 'topic', topic);
+    if (cert   !== 'all') html += chip(cert, 'cert', cert);
+    if (search.trim())    html += chip('"' + search + '"', 'search', '');
+
+    chips.innerHTML = html;
+    chips.style.display = html ? 'flex' : 'none';
+  }
+
+  function chip(label, type, val) {
+    return '<button class="qf-chip" onclick="removeFilter(\'' + type + '\')">' +
+      label +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="10" height="10"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+    '</button>';
+  }
+
+  window.removeFilter = function(type) {
+    if (type === 'level')  document.getElementById('qLevel').value  = 'all';
+    if (type === 'topic')  document.getElementById('qTopic').value  = 'all';
+    if (type === 'cert')   document.getElementById('qCert').value   = 'all';
+    if (type === 'search') document.getElementById('qSearch').value = '';
+    qFiltersChanged();
+  };
+
+  /* ── FILTER CHANGE ────────────────────────────── */
+  window.qFiltersChanged = function() {
+    var opts = {
+      level:  document.getElementById('qLevel').value,
+      topic:  document.getElementById('qTopic').value,
+      cert:   document.getElementById('qCert').value,
+      search: document.getElementById('qSearch').value.trim()
+    };
+
+    // Feed filtered pool to engine
+    if (typeof setQuizPool === 'function') {
+      setQuizPool(QBank.filter(opts));
+    }
+
+    updateChips();
+    updateStatsBar();
+
+    var box = document.getElementById('quizBox');
+    if (box) {
+      box.style.opacity = '0.5';
+      setTimeout(function(){ box.style.opacity = '1'; box.style.transition = 'opacity .3s'; }, 50);
+    }
+  };
+
+  /* ── HISTORY ──────────────────────────────────── */
+  window.recordResult = function(score, total, level) {
+    var history = JSON.parse(localStorage.getItem('quiz_history') || '[]');
+    history.unshift({
+      score: score, total: total, level: level,
+      pct: Math.round(score/total*100),
+      date: new Date().toLocaleDateString('pt-BR', {day:'2-digit', month:'short'})
+    });
+    history = history.slice(0, 8);
+    localStorage.setItem('quiz_history', JSON.stringify(history));
+    renderHistory(history);
+  };
+
+  function renderHistory(history) {
+    if (!history.length) return;
+    var grid  = document.getElementById('historyGrid');
+    var wrap  = document.getElementById('sessionHistory');
+    wrap.style.display = 'block';
+
+    grid.innerHTML = history.map(function(r) {
+      var col = r.pct >= 70 ? 'var(--c1)' : r.pct >= 50 ? 'var(--c6)' : 'var(--red, #f87171)';
+      return '<div class="hist-card">' +
+        '<div class="hist-pct" style="color:' + col + '">' + r.pct + '%</div>' +
+        '<div class="hist-score">' + r.score + '/' + r.total + ' corretas</div>' +
+        '<div class="hist-meta">' +
+          '<span class="badge badge-' + r.level + '" style="font-size:.55rem">' + levelLabel(r.level||'all') + '</span>' +
+          '<span style="font-family:\'DM Mono\',monospace;font-size:.58rem;color:var(--muted)">' + r.date + '</span>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function levelLabel(l) {
+    return l === 'beginner' ? 'Iniciante' : l === 'intermediate' ? 'Intermediário' : l === 'advanced' ? 'Avançado' : 'Todas';
+  }
+
+  /* ── NAV SHOW/HIDE ON SCROLL ──────────────────── */
+  var nav = document.getElementById('topNav');
+  var lastY = 0;
+  window.addEventListener('scroll', function() {
+    var y = window.scrollY;
+    nav.style.transform = (y > 80 && y > lastY) ? 'translateY(-100%)' : 'translateY(0)';
+    lastY = y;
+  }, { passive: true });
+
+  /* ── INIT ─────────────────────────────────────── */
+  populateSelects();
+  updateStatsBar();
+  renderHistory(JSON.parse(localStorage.getItem('quiz_history') || '[]'));
+
+  // Update stats after engine sets the pool
+  window.addEventListener('quizPoolUpdated', updateStatsBar);
+
+})();
+</script>
+
+<!-- ═══ HISTORY + PAGE EXTRA CSS ═══ -->
+<style>
+/* Page hero */
+.quiz-page-hero {
+  padding-top: calc(var(--fn-h, 52px) + 48px);
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(to bottom, var(--bg), var(--bg2));
+}
+.quiz-page-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  letter-spacing: 3px;
+  color: var(--c1);
+  margin-bottom: 12px;
+}
+.quiz-page-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.quiz-page-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: .75rem;
+  color: var(--muted);
+  margin-bottom: 24px;
+  line-height: 1.7;
+}
+
+/* Stats bar */
+.quiz-stats-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.qsb-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 2px;
+}
+.qsb-n {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1;
+}
+.qsb-l {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.qsb-sep {
+  width: 1px;
+  background: var(--border);
+  align-self: stretch;
+}
+
+/* Filter bar */
+.quiz-filters {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  position: sticky;
+  top: 52px;
+  z-index: 80;
+  backdrop-filter: blur(10px);
+}
+.qf-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.qf-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+.qf-search-icon {
+  position: absolute;
+  left: 10px; top: 50%;
+  transform: translateY(-50%);
+  width: 14px; height: 14px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.qf-search {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: .75rem;
+  padding: 7px 12px 7px 32px;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color .15s;
+}
+.qf-search:focus { border-color: var(--c1); }
+.qf-search::placeholder { color: var(--muted); }
+
+.qf-select {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: .72rem;
+  padding: 7px 28px 7px 10px;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%236b8070' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  transition: border-color .15s;
+  min-width: 140px;
+}
+.qf-select:focus { border-color: var(--c1); }
+.qf-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.qf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'DM Mono', monospace;
+  font-size: .68rem;
+  letter-spacing: .5px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--card);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.qf-btn:hover { border-color: var(--c1); color: var(--c1); background: rgba(74,222,128,.06); }
+.qf-btn-danger:hover { border-color: #f87171; color: #f87171; background: rgba(248,113,113,.06); }
+
+/* Filter chips */
+.qf-chips {
+  display: none;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.qf-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'DM Mono', monospace;
+  font-size: .6rem;
+  padding: 3px 9px;
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  color: var(--text);
+  background: var(--card);
+  cursor: pointer;
+  transition: all .12s;
+}
+.qf-chip:hover { border-color: #f87171; color: #f87171; }
+
+/* History grid */
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+.hist-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hist-pct {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1;
+}
+.hist-score {
+  font-family: 'DM Mono', monospace;
+  font-size: .65rem;
+  color: var(--muted);
+}
+.hist-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 4px;
+}
+.badge-all { background: rgba(107,128,112,.15); color: var(--muted); }
+
+/* Section label */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: .6rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .qf-row { gap: 6px; }
+  .qf-search-wrap { min-width: 100%; order: -1; }
+  .qf-select { flex: 1; min-width: 0; font-size: .68rem; }
+  .quiz-stats-bar { flex-wrap: wrap; }
+  .qsb-item { padding: 8px 14px; }
+}
+@media (max-width: 480px) {
+  .qf-actions { width: 100%; }
+  .qf-btn { flex: 1; justify-content: center; }
+}
+</style>
+
+</body>
+</html>
