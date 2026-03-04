@@ -2,56 +2,6 @@
 
 > Plataforma de estudos para certificações de TI · 18 meses · 5h/dia · 8 plataformas · 12 certificações
 
-## 📁 Estrutura de Pastas
-
-```
-n3platform/
-│
-├── index.html              ← Roadmap principal (18 meses, fases, livros, homelab)
-├── quiz.html               ← Página de Quiz (escalável para 1000+ questões)
-├── README.md
-│
-├── assets/
-│   ├── css/
-│   │   ├── main.css        ← Estilos globais (design tokens, hero, fases, nav)
-│   │   └── quiz.css        ← Estilos do quiz, filtros, tabs, dots, flashcards
-│   │
-│   └── js/
-│       ├── quiz-engine.js  ← Motor do quiz (render, estado, resultado, API pública)
-│       └── quote-engine.js ← Frases motivacionais rotativas
-│
-├── data/
-│   ├── questions.js        ← Banco base de questões (31 questões)
-│   └── questions-extra.js  ← Template para adicionar pacotes extras
-│
-└── components/             ← (futuro) Web components reutilizáveis
-```
-
-## 🚀 Deploy no GitHub Pages
-
-### 1. Criar repositório
-```bash
-git init
-git add .
-git commit -m "feat: N3 Platform initial release"
-git branch -M main
-git remote add origin https://github.com/SEU_USUARIO/n3platform.git
-git push -u origin main
-```
-
-### 2. Ativar GitHub Pages
-- Vá em **Settings → Pages**
-- Source: **Deploy from a branch**
-- Branch: `main` / `/ (root)`
-- Clique em **Save**
-
-Seu site estará em: `https://SEU_USUARIO.github.io/n3platform/`
-
-### 3. Adicionar imagem hero
-Coloque `laina.png` na pasta `assets/` e o hero do roadmap irá carregá-la automaticamente.
-
----
-
 ## ➕ Como adicionar mais questões (escalar para 1000+)
 
 ### Opção A — Adicionar no arquivo existente
