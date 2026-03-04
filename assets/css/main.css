@@ -861,6 +861,22 @@ footer {
   align-items: center;
   justify-content: space-between;
 }
+
+/* ── NAV RIGHT (theme toggle wrapper) ──── */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.top-nav .wrap {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .nav-brand {
   font-family: 'DM Mono', monospace;
   font-size: .7rem;
@@ -906,4 +922,204 @@ footer {
   color: #1e3a5f;
   background: rgba(30,58,95,.06);
   border-color: rgba(30,58,95,.2);
+}
+
+/* ════════════════════════════════════════════════════════
+   THEME SYSTEM — Dark (default) + Corporate Light
+════════════════════════════════════════════════════════ */
+
+/* Global smooth transition on theme switch */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: .22s;
+  transition-timing-function: ease;
+}
+/* But keep layout/transform transitions untouched */
+a, button { transition-property: background-color, border-color, color, box-shadow, opacity, transform; }
+
+/* ── LIGHT / CORPORATE MINIMALIST ─────────────────────────
+   Paleta: azul-marinho #1e2d3d, ardósia #475569,
+           cinza-gelo #e2e8f0, branco #f8fafc
+──────────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg:      #f0f4f8;
+  --bg2:     #e8edf2;
+  --card:    #ffffff;
+  --border:  #dde3ea;
+  --border2: #b0bec8;
+  --text:    #1e2d3d;
+  --muted:   #64748b;
+  --faint:   #e2e8f0;
+
+  /* phase palette — corporate, muted */
+  --c1: #1a6b3c;   /* green   */
+  --c2: #1d5ea6;   /* blue    */
+  --c3: #b44e0a;   /* orange  */
+  --c4: #5b21b6;   /* violet  */
+  --c5: #9d1a5a;   /* pink    */
+  --c6: #7a4e00;   /* amber   */
+}
+
+[data-theme="light"] body {
+  background: var(--bg);
+  color: var(--text);
+}
+[data-theme="light"] body::before { opacity: 0; }
+
+/* Hero */
+[data-theme="light"] .hero-bg-grid {
+  background-image:
+    linear-gradient(rgba(30,45,61,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30,45,61,.08) 1px, transparent 1px);
+  opacity: 1;
+}
+[data-theme="light"] .hero-glow {
+  background:
+    radial-gradient(ellipse 70% 55% at 20% 80%, rgba(26,107,60,.07), transparent),
+    radial-gradient(ellipse 50% 40% at 80% 20%, rgba(29,94,166,.05), transparent);
+}
+[data-theme="light"] .hero h1       { color: #1e2d3d; }
+[data-theme="light"] .hero-eyebrow  { color: var(--c1); }
+[data-theme="light"] .hero-subtitle { color: var(--muted); }
+[data-theme="light"] .badge-bar .badge-item { border-color: var(--border); color: var(--muted); }
+
+/* Stats */
+[data-theme="light"] .stats-row     { border-color: var(--border); }
+[data-theme="light"] .stat-cell     { background: #fff; border-color: var(--border); }
+[data-theme="light"] .stat-n        { color: #1e2d3d; }
+[data-theme="light"] .stat-l        { color: var(--muted); }
+
+/* Phase cards */
+[data-theme="light"] .phase-card    { background: #fff; border-color: var(--border); }
+[data-theme="light"] .ph-header     { border-bottom-color: var(--border); background: #f8fafc; }
+[data-theme="light"] .ph-title      { color: #1e2d3d; }
+[data-theme="light"] .ph-subtitle   { color: var(--muted); }
+[data-theme="light"] .course-item   { border-bottom-color: var(--border); }
+[data-theme="light"] .course-name   { color: #1e2d3d; }
+[data-theme="light"] .course-desc, [data-theme="light"] .course-platform { color: var(--muted); }
+[data-theme="light"] .cert-chip     { background: var(--faint); color: var(--muted); border-color: var(--border); }
+
+/* Section label */
+[data-theme="light"] .section-label          { color: var(--muted); }
+[data-theme="light"] .section-label::after   { background: var(--border); }
+
+/* Cert roadmap */
+[data-theme="light"] .cert-roadmap  { border-color: var(--border); }
+[data-theme="light"] .cert-card     { background: #fff; border-color: var(--border); }
+[data-theme="light"] .cert-card:hover { border-color: var(--border2); }
+[data-theme="light"] .cert-name     { color: #1e2d3d; }
+[data-theme="light"] .cert-desc     { color: var(--muted); }
+[data-theme="light"] .cert-phase    { color: var(--muted); }
+
+/* Weekly schedule */
+[data-theme="light"] .week-grid     { border-color: var(--border); }
+[data-theme="light"] .wday          { background: #fff; border-color: var(--border); }
+[data-theme="light"] .wd-name       { color: var(--muted); }
+[data-theme="light"] .wd-h          { color: #1e2d3d; }
+[data-theme="light"] .wd-focus      { color: var(--muted); border-top-color: var(--border); }
+
+/* Tips */
+[data-theme="light"] .tips-grid .tip-card  { background: #fff; border-color: var(--border); }
+[data-theme="light"] .tip-title            { color: #1e2d3d; }
+[data-theme="light"] .tip-body             { color: var(--muted); }
+
+/* Books */
+[data-theme="light"] .book-card    { background: #fff; border-color: var(--border); }
+[data-theme="light"] .book-cover   { background: #f0f4f8; border-color: var(--border); }
+[data-theme="light"] .book-title   { color: #1e2d3d; }
+[data-theme="light"] .book-author  { color: var(--muted); }
+[data-theme="light"] .book-desc    { color: var(--muted); }
+[data-theme="light"] .book-tags    { border-top-color: var(--border); }
+[data-theme="light"] .book-tag     { border-color: var(--border); color: var(--muted); background: var(--faint); }
+[data-theme="light"] .book-tag.free { color: var(--c1); border-color: rgba(26,107,60,.3); background: rgba(26,107,60,.06); }
+
+/* Homelab */
+[data-theme="light"] .lab-card          { background: #fff; border-color: var(--border); }
+[data-theme="light"] .lab-header        { background: #f8fafc; border-bottom-color: var(--border); }
+[data-theme="light"] .lab-level         { color: var(--muted); }
+[data-theme="light"] .lab-title         { color: #1e2d3d; }
+[data-theme="light"] .lab-component     { border-bottom-color: var(--border); }
+[data-theme="light"] .lab-comp-name     { color: #1e2d3d; }
+[data-theme="light"] .lab-comp-desc     { color: var(--muted); }
+[data-theme="light"] .lab-cost          { border-top-color: var(--border); background: #f8fafc; }
+[data-theme="light"] .lab-cost-label    { color: var(--muted); }
+
+/* Simulados */
+[data-theme="light"] .sim-card          { background: #fff; border-color: var(--border); }
+[data-theme="light"] .sim-card:hover    { border-color: var(--border2); }
+[data-theme="light"] .sim-platform      { color: var(--muted); }
+[data-theme="light"] .sim-name          { color: #1e2d3d; }
+[data-theme="light"] .sim-desc          { color: var(--muted); }
+[data-theme="light"] .sim-bottom        { border-top-color: var(--border); }
+[data-theme="light"] .sim-cert-tag      { border-color: var(--border); color: var(--muted); background: var(--faint); }
+[data-theme="light"] .sim-price         { color: #1e2d3d; }
+
+/* Quote bar */
+[data-theme="light"] .quote-bar         { background: #fff; border-color: var(--border); }
+[data-theme="light"] .quote-bar::before { color: rgba(30,45,61,.15); }
+[data-theme="light"] .quote-text        { color: #334155; }
+[data-theme="light"] .quote-author      { color: var(--muted); }
+[data-theme="light"] .qdot              { background: var(--border2); }
+[data-theme="light"] .qdot.active       { background: var(--c1); }
+[data-theme="light"] .quote-progress    { background: var(--border); }
+
+/* Dedication */
+[data-theme="light"] .dedication        { background: rgba(26,107,60,.05); border-color: rgba(26,107,60,.2); }
+[data-theme="light"] .ded-name          { color: #1e2d3d; }
+[data-theme="light"] .ded-role          { color: var(--muted); }
+
+/* Fase nav bar */
+[data-theme="light"] .fase-nav          { background: rgba(240,244,248,.95); border-top-color: var(--border); }
+[data-theme="light"] .fn-btn            { border-color: var(--border); color: var(--muted); }
+[data-theme="light"] .fn-btn:hover      { background: #fff; color: #1e2d3d; }
+[data-theme="light"] .fn-btn.fn-active  { background: #fff; color: #1e2d3d; border-color: var(--border2); }
+[data-theme="light"] .fn-label          { color: var(--muted); }
+[data-theme="light"] .fn-num            { color: var(--c1); }
+
+/* Top nav */
+[data-theme="light"] .top-nav           { background: rgba(248,250,252,.97); border-bottom-color: var(--border); }
+[data-theme="light"] .nav-brand         { color: #1e2d3d; }
+[data-theme="light"] .nav-logo-dot      { background: var(--c1); box-shadow: 0 0 8px rgba(26,107,60,.35); }
+[data-theme="light"] .nav-link          { color: var(--muted); }
+[data-theme="light"] .nav-link:hover    { color: #1e2d3d; background: #f0f4f8; border-color: var(--border); }
+[data-theme="light"] .nav-link.active   { color: var(--c1); background: rgba(26,107,60,.07); border-color: rgba(26,107,60,.25); }
+[data-theme="light"] .nav-link-quiz     { background: rgba(26,107,60,.09) !important; border-color: rgba(26,107,60,.3) !important; color: var(--c1) !important; }
+[data-theme="light"] .nav-badge         { background: var(--c1); color: #fff; }
+[data-theme="light"] .nav-link-roadmap  { border-color: var(--border) !important; color: var(--muted) !important; }
+[data-theme="light"] .nav-link-roadmap:hover { background: #f0f4f8 !important; color: #1e2d3d !important; }
+[data-theme="light"] .fab-quiz          { background: var(--c1); color: #fff; box-shadow: 0 4px 20px rgba(26,107,60,.35); }
+
+/* ── THEME TOGGLE BUTTON ──────────────────────────────── */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: .6rem;
+  letter-spacing: .5px;
+  padding: 5px 12px;
+  border: 1px solid var(--border2);
+  border-radius: 99px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color .15s, background .15s, border-color .15s, transform .15s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.theme-toggle:hover {
+  color: var(--text);
+  border-color: var(--text);
+  background: var(--card);
+  transform: translateY(-1px);
+}
+.theme-toggle svg { transition: transform .45s ease; flex-shrink: 0; }
+.theme-toggle:hover svg { transform: rotate(30deg); }
+[data-theme="light"] .theme-toggle      { border-color: var(--border2); color: var(--muted); }
+[data-theme="light"] .theme-toggle:hover { background: #e8edf2; color: #1e2d3d; border-color: #1e2d3d; }
+
+@media (max-width: 600px) {
+  .theme-toggle .toggle-label { display: none; }
+  .theme-toggle { padding: 5px 8px; border-radius: 7px; }
 }
